@@ -22,7 +22,6 @@ import { AuroraBackground } from './components/ui/aurora-background'
 import { AuroraBackgroundDemo } from './components/TestPage'
 
 const browserRouter = createBrowserRouter([
-
   {
     path: "/",
     element: <ProtectedRoutes><MainLayout/></ProtectedRoutes>,

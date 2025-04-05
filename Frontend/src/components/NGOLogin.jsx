@@ -24,7 +24,7 @@ const NGOLogin = () => {
             })
             if (res.data.success) {
                 dispatch(setAuthUser(res.data.ngo))
-                navigate("/")
+                navigate("/") // This will now redirect to MainLayout since user is authenticated
                 toast.success(res.data.message)
             }
         } catch (error) {

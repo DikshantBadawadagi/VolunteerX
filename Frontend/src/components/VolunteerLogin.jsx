@@ -24,7 +24,7 @@ const VolunteerLogin = () => {
             })
             if (res.data.success) {
                 dispatch(setAuthUser(res.data.volunteer))
-                navigate("/")
+                navigate("/") // This will now redirect to MainLayout since user is authenticated
                 toast.success(res.data.message)
             }
         } catch (error) {
