@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import getDataUri from "../utils/datauri.js";
 import cloudinary from "../utils/cloudinary.js";
+import { User } from "../models/user.model.js";
 
 export const registerVolunteer = async (req, res) => {
     try {
@@ -19,12 +20,21 @@ export const registerVolunteer = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        await Volunteer.create({
+        const volunteer = await Volunteer.create({
             ...req.body,
             password: hashedPassword
         });
 
-        return res.status(201).json({ success: true, message: "Volunteer registered successfully" });
+        // Register in User model as well
+        await User.create({
+            username: name,
+            email,
+            password: hashedPassword,
+            type: "volunteer"
+        });
+
+        return res.status(201).json({ success: true, message: "Volunteer registered successfully", volunteer });
+
     } catch (err) {
         console.error(err);
         return res.status(500).json({ success: false, message: "Internal Server Error" });
@@ -86,4 +96,4 @@ export const editVolunteerProfile = async (req, res) => {
         console.error(err);
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }
-};
+}
