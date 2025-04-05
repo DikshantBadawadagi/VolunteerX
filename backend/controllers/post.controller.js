@@ -1,4 +1,3 @@
-import sharp from "sharp";
 import cloudinary from "../utils/cloudinary.js";
 import { Post } from "../models/post.model.js";
 import { User } from "../models/user.model.js";
@@ -13,15 +12,18 @@ export const addNewPost = async (req, res) => {
 
         if (!image) return res.status(400).json({ message: 'Image required' });
 
-        // image upload 
-        const optimizedImageBuffer = await sharp(image.buffer)
-            .resize({ width: 800, height: 800, fit: 'inside' })
-            .toFormat('jpeg', { quality: 80 })
-            .toBuffer();
+        // Convert buffer to base64
+        const fileUri = `data:${image.mimetype};base64,${image.buffer.toString('base64')}`;
+        
+        // Upload to cloudinary directly without Sharp optimization
+        const cloudResponse = await cloudinary.uploader.upload(fileUri, {
+            resource_type: 'auto',
+            transformation: [
+                { width: 800, height: 800, crop: 'limit' },
+                { quality: 'auto:good' }
+            ]
+        });
 
-        // buffer to data uri
-        const fileUri = `data:image/jpeg;base64,${optimizedImageBuffer.toString('base64')}`;
-        const cloudResponse = await cloudinary.uploader.upload(fileUri);
         const post = await Post.create({
             caption,
             image: cloudResponse.secure_url,
@@ -39,12 +41,17 @@ export const addNewPost = async (req, res) => {
             message: 'New post added',
             post,
             success: true,
-        })
+        });
 
     } catch (error) {
-        console.log(error);
+        console.error(error);
+        return res.status(500).json({ 
+            message: 'Error creating post',
+            success: false 
+        });
     }
-}
+};
+
 export const getAllPost = async (req, res) => {
     try {
         const posts = await Post.find().sort({ createdAt: -1 })
@@ -60,11 +67,12 @@ export const getAllPost = async (req, res) => {
         return res.status(200).json({
             posts,
             success: true
-        })
+        });
     } catch (error) {
         console.log(error);
     }
 };
+
 export const getUserPost = async (req, res) => {
     try {
         const authorId = req.id;
@@ -82,11 +90,12 @@ export const getUserPost = async (req, res) => {
         return res.status(200).json({
             posts,
             success: true
-        })
+        });
     } catch (error) {
         console.log(error);
     }
-}
+};
+
 export const likePost = async (req, res) => {
     try {
         const likeKrneWalaUserKiId = req.id;
@@ -110,16 +119,17 @@ export const likePost = async (req, res) => {
                 userDetails:user,
                 postId,
                 message:'Your post was liked'
-            }
+            };
             const postOwnerSocketId = getReceiverSocketId(postOwnerId);
             io.to(postOwnerSocketId).emit('notification', notification);
         }
 
         return res.status(200).json({message:'Post liked', success:true});
     } catch (error) {
-
+        console.log(error);
     }
-}
+};
+
 export const dislikePost = async (req, res) => {
     try {
         const likeKrneWalaUserKiId = req.id;
@@ -142,18 +152,17 @@ export const dislikePost = async (req, res) => {
                 userDetails:user,
                 postId,
                 message:'Your post was liked'
-            }
+            };
             const postOwnerSocketId = getReceiverSocketId(postOwnerId);
             io.to(postOwnerSocketId).emit('notification', notification);
         }
 
-
-
         return res.status(200).json({message:'Post disliked', success:true});
     } catch (error) {
-
+        console.log(error);
     }
-}
+};
+
 export const addComment = async (req,res) =>{
     try {
         const postId = req.params.id;
@@ -169,7 +178,7 @@ export const addComment = async (req,res) =>{
             text,
             author:commentKrneWalaUserKiId,
             post:postId
-        })
+        });
 
         await comment.populate({
             path:'author',
@@ -183,12 +192,13 @@ export const addComment = async (req,res) =>{
             message:'Comment Added',
             comment,
             success:true
-        })
+        });
 
     } catch (error) {
         console.log(error);
     }
 };
+
 export const getCommentsOfPost = async (req,res) => {
     try {
         const postId = req.params.id;
@@ -202,7 +212,8 @@ export const getCommentsOfPost = async (req,res) => {
     } catch (error) {
         console.log(error);
     }
-}
+};
+
 export const deletePost = async (req,res) => {
     try {
         const postId = req.params.id;
@@ -228,12 +239,13 @@ export const deletePost = async (req,res) => {
         return res.status(200).json({
             success:true,
             message:'Post deleted'
-        })
+        });
 
     } catch (error) {
         console.log(error);
     }
-}
+};
+
 export const bookmarkPost = async (req,res) => {
     try {
         const postId = req.params.id;
@@ -258,4 +270,4 @@ export const bookmarkPost = async (req,res) => {
     } catch (error) {
         console.log(error);
     }
-}
+};
