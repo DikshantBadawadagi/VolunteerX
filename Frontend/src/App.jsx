@@ -2,10 +2,15 @@ import { useEffect } from 'react'
 import ChatPage from './components/ChatPage'
 import EditProfile from './components/EditProfile'
 import Home from './components/Home'
-import Login from './components/Login'
+import LoginSelection from './components/LoginSelection'
+import NGOLogin from './components/NGOLogin'
+import VolunteerLogin from './components/VolunteerLogin'
 import MainLayout from './components/MainLayout'
 import Profile from './components/Profile'
 import Signup from './components/Signup'
+import SignupSelection from './components/SignupSelection'
+import NGOSignup from './components/NGOSignup'
+import VolunteerSignup from './components/VolunteerSignup'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { io } from "socket.io-client";
 import { useDispatch, useSelector } from 'react-redux'
@@ -42,11 +47,27 @@ const browserRouter = createBrowserRouter([
   },
   {
     path: '/login',
-    element: <Login />
+    element: <LoginSelection />
+  },
+  {
+    path: '/ngo/login',
+    element: <NGOLogin />
+  },
+  {
+    path: '/volunteer/login',
+    element: <VolunteerLogin />
   },
   {
     path: '/signup',
-    element: <Signup />
+    element: <SignupSelection />
+  },
+  {
+    path: '/ngo/signup',
+    element: <NGOSignup />
+  },
+  {
+    path: '/volunteer/signup',
+    element: <VolunteerSignup />
   },
   {
     path: '/test',
