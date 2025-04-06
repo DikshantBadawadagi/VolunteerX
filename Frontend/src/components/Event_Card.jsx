@@ -1,137 +1,3 @@
-// "use client"
-
-// import { useState } from "react"
-// import { motion } from "framer-motion"
-// import { Card_v2, CardContent_v2, CardDescription_v2, CardFooter_v2, CardHeader_v2, CardTitle_v2 } from "./ui/card_v2.jsx"
-// import { Badge_v2 } from "./ui/badge_v2.jsx"
-// import { Button_v2 } from "./ui/button_v2.jsx"
-// import { Calendar, MapPin, Clock, Users } from "lucide-react"
-
-// const Event_Card = ({ event, onJoin }) => {
-//   const [isHovered, setIsHovered] = useState(false)
-//   const [joining, setJoining] = useState(false)
-
-//   const formatDate = (dateString) => {
-//     const date = new Date(dateString)
-//     return date.toLocaleDateString("en-US", {
-//       month: "short",
-//       day: "numeric",
-//       year: "numeric",
-//       hour: "2-digit",
-//       minute: "2-digit",
-//     })
-//   }
-
-//   const handleJoinClick = async (e) => {
-//     e.stopPropagation()
-//     setJoining(true)
-//     await onJoin()
-//     setJoining(false)
-//   }
-
-//   const item = {
-//     hidden: { opacity: 0, y: 20 },
-//     show: { opacity: 1, y: 0 },
-//   }
-
-//   return (
-//     <motion.div
-//       variants={item}
-//       whileHover={{
-//         scale: 1.05,
-//         transition: { duration: 0.2 },
-//       }}
-//       onHoverStart={() => setIsHovered(true)}
-//       onHoverEnd={() => setIsHovered(false)}
-//       className="cursor-pointer"
-//     >
-//       <Card_v2 className="overflow-hidden h-full transition-all duration-300 shadow-lg hover:shadow-xl">
-//         <div className="relative h-48 overflow-hidden">
-//           <img
-//             src={event.photo || "/placeholder.svg"}
-//             alt={event.name}
-//             className="w-full h-full object-cover transition-transform duration-500 ease-in-out"
-//             style={{
-//               transform: isHovered ? "scale(1.1)" : "scale(1)",
-//             }}
-//           />
-//           <div className="absolute top-2 right-2">
-//             <Badge_v2
-//               className={`
-//               ${
-//                 event.status === "upcoming"
-//                   ? "bg-green-500"
-//                   : event.status === "ongoing"
-//                     ? "bg-blue-500"
-//                     : "bg-gray-500"
-//               }
-//             `}
-//             >
-//               {event.status}
-//             </Badge_v2>
-//           </div>
-//         </div>
-
-//         <CardHeader_v2 className="pb-2">
-//           <CardTitle_v2 className="text-xl font-bold line-clamp-1">{event.name}</CardTitle_v2>
-//           <CardDescription_v2 className="flex items-center gap-1">
-//             <MapPin size={14} />
-//             {event.location}
-//           </CardDescription_v2>
-//         </CardHeader_v2>
-
-//         <CardContent_v2>
-//           <div className="space-y-2">
-//             <div className="flex items-center gap-2">
-//               <Calendar size={16} className="text-gray-500" />
-//               <span className="text-sm">{formatDate(event.startDate)}</span>
-//             </div>
-
-//             <div className="flex items-center gap-2">
-//               <Clock size={16} className="text-gray-500" />
-//               <span className="text-sm">{event.totalHours} hours</span>
-//             </div>
-
-//             <p className="text-sm line-clamp-2 mt-2">{event.description}</p>
-
-//             <div className="mt-2">
-//               <div className="flex items-center gap-2">
-//                 <Users size={16} className="text-gray-500" />
-//                 <span className="text-sm">{event.volunteerCapacity} volunteers needed</span>
-//               </div>
-//               <div className="flex flex-wrap gap-1 mt-2">
-//                 {event.skillsRequired.map((skill, index) => (
-//                   <Badge_v2 key={index} variant="outline" className="text-xs">
-//                     {skill}
-//                   </Badge_v2>
-//                 ))}
-//               </div>
-//             </div>
-//           </div>
-//         </CardContent_v2>
-
-//         <CardFooter_v2 className="pt-0 flex justify-between items-center">
-//           <Badge_v2 variant="secondary">{event.type}</Badge_v2>
-//           <Button_v2 size="sm" disabled={event.status === "past" || joining} onClick={handleJoinClick}>
-//             {joining ? (
-//               <>
-//                 <div className="mr-2 h-3 w-3 animate-spin rounded-full border-2 border-b-transparent"></div>
-//                 Joining...
-//               </>
-//             ) : event.status === "past" ? (
-//               "Event Ended"
-//             ) : (
-//               "Join Event"
-//             )}
-//           </Button_v2>
-//         </CardFooter_v2>
-//       </Card_v2>
-//     </motion.div>
-//   )
-// }
-
-// export default Event_Card
-
 "use client"
 
 import { useState } from "react"
@@ -156,12 +22,21 @@ const Event_Card = ({ event, onJoin }) => {
     })
   }
 
-  const handleJoinClick = async (e) => {
+  // const handleJoinClick = async (e) => {
+  //   e.stopPropagation()
+  //   setJoining(true)
+  //   await onJoin()
+  //   setJoining(false)
+  // }
+  const handleJoinClick = (e) => {
     e.stopPropagation()
     setJoining(true)
-    await onJoin()
-    setJoining(false)
+    setTimeout(() => {
+      alert("You have joined the event!") // simple hardcoded action
+      setJoining(false)
+    }, 1000)
   }
+  
 
   const item = {
     hidden: { opacity: 0, y: 20 },

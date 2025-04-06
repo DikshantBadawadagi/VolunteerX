@@ -94,6 +94,14 @@ const browserRouter = createBrowserRouter([
           </ProtectedRoutes>
         ),
       },
+      {
+        path: '/create-image',
+        element: (
+          <ProtectedRoutes>
+            {/* <AddEventForm /> */}
+          </ProtectedRoutes>
+        ),
+      },
     ],
   },
   {

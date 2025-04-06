@@ -24,6 +24,10 @@ const eventSchema = new mongoose.Schema({
   hostedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'NGO', required: true },
 
   attendanceRecord: [attendanceRecordSchema],
+  volunteerRequests: [{ type: mongoose.Schema.Types.ObjectId, ref: "Volunteer" }],
+
+
+  approvedVolunteers: [{ type: mongoose.Schema.Types.ObjectId, ref: "Volunteer" }],
 
   totalHours: { type: Number } // Can also be computed dynamically
 });

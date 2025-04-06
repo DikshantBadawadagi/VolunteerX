@@ -6,6 +6,7 @@ import cloudinary from "../utils/cloudinary.js";
 import { User } from "../models/user.model.js";
 import { Event } from "../models/event.model.js"; // ✅ Add this line
 
+
 export const registerVolunteer = async (req, res) => {
     try {
         const { name, email, password } = req.body;
@@ -138,3 +139,32 @@ export const updateJoinEvent = async (req, res) => {
       return res.status(500).json({ success: false, message: "Internal Server Error" });
     }
   };
+
+export const joinEvent = async (req, res) => {
+  const { eventId } = req.params;
+  const volunteerId = req.user._id; // assuming JWT auth stores user in req.user
+
+  try {
+    const event = await Event.findById(eventId);
+    if (!event) return res.status(404).json({ message: "Event not found" });
+
+    // Check if already requested
+    if (event.volunteerRequests.includes(volunteerId)) {
+      return res.status(400).json({ message: "Already requested to join" });
+    }
+
+    event.volunteerRequests.push(volunteerId);
+    await event.save();
+
+    // Optionally update Volunteer model too
+    await Volunteer.findByIdAndUpdate(volunteerId, {
+      $addToSet: { requestedEvents: eventId },
+    });
+
+    res.status(200).json({ message: "Request sent successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
+};
+
+
