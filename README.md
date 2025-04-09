@@ -19,3 +19,6 @@
 - 📆 **Event Management:** Organizations can create, manage, and monitor events.
 - ✅ **Volunteer Tracking:** Track attendance, hours served, and impact statistics.
 - 🛡️ **Secure Authentication:** Secure login system for both volunteers and organizers.
+-  ** Text to Sign Language**
+-  ** TAB Accessibility Feature**
+-  ** Text to Speech**
